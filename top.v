@@ -14,7 +14,7 @@ module top(
 	   input  pD6,
 	   input  pD7,
 	   input  WEb,
-	   input  READY,
+	   output  READY,
 	   
 	   output LED1,
 	   output LED2,
