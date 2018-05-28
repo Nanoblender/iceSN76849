@@ -14,6 +14,7 @@ module top(
 	   input  pD6,
 	   input  pD7,
 	   input  WEb,
+	   input  READY,
 	   
 	   output LED1,
 	   output LED2,
@@ -187,21 +188,19 @@ module top(
  
    
    
-   
-
-   
-   
-   assign LED1=value[0];
-   assign LED2=value[1];
-   assign LED3=value[2];
-   assign LED4=value[3];
-   assign LED5=value[4];
-   assign LED6=noise_rst;
-   assign LED7=new_data_in;
-   assign LED8=load;
+      
+   assign LED1=(a1<10);
+   assign LED2=(a2<10);
+   assign LED3=(a3<10);
+   assign LED4=(a4<0);
+   assign LED5=0;
+   assign LED6=0;
+   assign LED7=READY;
+   assign LED8=new_data_in;
     
    assign new_data_in=~WEb;
    assign data_in={pD7,pD6,pD5,pD4,pD3,pD2,pD1,pD0};
-
+   assign READY=~load;
+   
    
 endmodule // top
