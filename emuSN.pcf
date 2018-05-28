@@ -1,0 +1,41 @@
+# ##############################################################################
+
+# iCEcube PCF
+
+# Version:            2012.09SP1.22498
+
+# File Generated:     Sep 14 2013 17:36:59
+
+# Family & Device:    iCE40HX8K
+
+# Package:            CT256
+
+# ##############################################################################
+###IOSet List 5
+set_io dac_out C16
+
+set_io clk J3
+
+set_io ext_clk B16
+
+set_io LED3 A2
+set_io LED7 B3
+set_io LED2 B4
+set_io LED4 A1
+set_io LED6 C4
+set_io LED8 C3
+set_io LED1 B5
+set_io LED5 C5
+
+set_io rx B10
+#set_io tx B12
+
+set_io pD0 F16
+set_io pD1 G16
+set_io pD2 H16
+set_io pD3 J15
+set_io pD4 G14
+set_io pD5 K14
+set_io pD6 K15
+set_io pD7 M16
+set_io WEb P15
