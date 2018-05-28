@@ -39,3 +39,4 @@ set_io pD5 K14
 set_io pD6 K15
 set_io pD7 M16
 set_io WEb P15
+set_io READY P16
