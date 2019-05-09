@@ -4,6 +4,7 @@ module baud_gen(
 		);
    
    reg [4:0] 	       div_cntr;
+   reg 		       rx_en;
    
    
    always@(posedge clk)
@@ -12,10 +13,12 @@ module baud_gen(
 	if (div_cntr == 12)
 	  begin
 	     div_cntr<=0;
-	     rx_clk <= 1;
+	     rx_en <= 1;
 	  end
-	else rx_clk<=0;  
+	else rx_en<=0;  
      end
+   assign rx_clk=rx_en;
+   
 endmodule // baud_gen
 
 

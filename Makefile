@@ -1,9 +1,29 @@
+PROJ_NAME=emuSN
+TARGET=hx8k
+PACKAGE=ct256
+TOP_CELL=top
+
+
 gen:
-	yosys -p "synth_ice40 -blif emuSN.blif" top.v control_reg.v tone.v noise.v mixer.v serial.v reception.v dac.v
-	arachne-pnr -d 8k -P ct256 -p emuSN.pcf emuSN.blif -o emuSN.txt
-	icepack emuSN.txt emuSN.bin
+	yosys -p "synth_ice40 -top ${TOP_CELL} -json ${PROJ_NAME}.json" *.v
+	nextpnr-ice40 --json ${PROJ_NAME}.json --pcf ${PROJ_NAME}.pcf --asc ${PROJ_NAME}.txt --${TARGET} --package ${PACKAGE}
+	icepack ${PROJ_NAME}.txt ${PROJ_NAME}.bin
+
+pnr:
+	yosys -p "synth_ice40 -top ${TOP_CELL} -json ${PROJ_NAME}.json" *.v
+	nextpnr-ice40 --json ${PROJ_NAME}.json --pcf ${PROJ_NAME}.pcf --asc ${PROJ_NAME}.txt --${TARGET} --package ${PACKAGE} --gui
 
 flash: emuSN.bin
-	iceprog emuSN.bin
+	iceprog ${PROJ_NAME}.bin
+
+sim:
+	verilator -Wall -cc ${TOP_CELL}.v --exe sim_main.cpp
+	make -C obj_dir -f V${TOP_CELL}.mk
+	obj_dir/V${TOP_CELL}
+
+
+clean-sim:
+	rm -r obj_dir/
+
 clean:
-	rm emuSN.blif emuSN.txt emuSN.bin
+	rm ${PROJ_NAME}.json ${PROJ_NAME}.txt ${PROJ_NAME}.bin

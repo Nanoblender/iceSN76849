@@ -2,8 +2,7 @@ module top(
 	   input  clk,
 	   input  ext_clk,
 	   input  rx,
-	   //	   output tx,
-	   output dac_out,
+//	   output tx,
 
 	   input  pD0,
 	   input  pD1,
@@ -14,7 +13,9 @@ module top(
 	   input  pD6,
 	   input  pD7,
 	   input  WEb,
-	   output  READY,
+	   output READY,
+
+	   output dac_out,
 	   
 	   output LED1,
 	   output LED2,
@@ -32,7 +33,7 @@ module top(
    reg [3:0] 	  sn_cntr; 	  
    reg 		  int_clk;
    reg 		  dac_clk;
-   reg 		  snd_clk;
+   wire 	  snd_clk;
  
    wire [9:0] 	  f1;
    wire [3:0] 	  a1;
@@ -75,7 +76,7 @@ module top(
    
    
    always@(posedge ext_clk)sn_cntr <= sn_cntr + 1;
-   assign snd_clk=sn_cntr[3];
+   assign snd_clk=sn_cntr==4'b1111;
    
 
 
@@ -107,36 +108,39 @@ module top(
 		       );
    
 
-   
-   
    tone tone_gen1(
+		  .clk(clk),
 		  .tone_clk (snd_clk),
 		  .freq (f1),
 		  .tone_out(sndw1) 
 		  );
    tone tone_gen2(
+		  .clk(clk),
 		  .tone_clk (snd_clk),
 		  .freq (f2),
 		  .tone_out(sndw2) 
 		  );
    tone tone_gen3(
+		  .clk(clk),
 		  .tone_clk (snd_clk),
 		  .freq (f3),
 		  .tone_out(sndw3) 
 		  );
-   noise_freq_sel noise_freq_sel(
-				 .tone_clk(snd_clk),
-				 .tone(sndw3),
-				 .selecta(f4[1:0]),
-				 .noise_clk(noise_clk)
-				 );
+   noise_freq_sel noise_sel(
+			    .clk(clk),
+			    .tone_clk(snd_clk),
+			    .tone(sndw3),
+			    .selecta(f4[2:0]),
+			    .noise_clk(noise_clk)
+			    );
    noise noise_gen(
+		   .clk(clk),
 		   .noise_clk(noise_clk),
 		   .mode(f4[2]),
 		   .noise_out(noisew),
 		   .rst(noise_rst)
 		   );
-   
+
    control_reg ctrl_reg(
 			.clk (clk),
 			.adress (adress),

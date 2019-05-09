@@ -1,4 +1,5 @@
-module tone(input tone_clk,
+module tone(input       clk,
+	    input 	tone_clk,
 	    input [9:0] freq,
 	    output 	tone_out
 	    );
@@ -6,21 +7,23 @@ module tone(input tone_clk,
    reg 		   half_pulse;
    reg 		   out_cntr;
    
-   always@(posedge tone_clk)
+   always@(posedge clk)
      begin
-	freq_cntr <= freq_cntr + 1;
-	if (freq_cntr == freq-1)
+	if(tone_clk==1)
 	  begin
-	     freq_cntr <= 0;
-	     half_pulse <= 1;
-	  end
-	else half_pulse <= 0;
-	if(half_pulse == 1)
-	  begin 
-	     out_cntr <= !out_cntr;
+	     freq_cntr <= freq_cntr + 1;
+	     if (freq_cntr == freq-1)
+	       begin
+		  freq_cntr <= 0;
+		  half_pulse <= 1;
+	       end
+	     else half_pulse <= 0;
+	     if(half_pulse == 1)
+	       begin 
+		  out_cntr <= !out_cntr;
+	       end
 	  end
      end
-   
 assign tone_out=out_cntr;
 
 endmodule // tone
